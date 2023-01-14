@@ -1,0 +1,5 @@
+.cache
+.clang-format
+build/*
+compile_commands.json
+ietto
