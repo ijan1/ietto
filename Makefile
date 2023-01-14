@@ -1,7 +1,7 @@
 CC := gcc
 CXX := g++
-CFLAGS := -Wall -Wextra -Iextern/SDL/include -Iextern/SDL_image
-CXXFLAGS := -Wall -Wextra -std=c++20 $(shell sdl2-config --cflags)
+CFLAGS := -Wall -Wextra -Og -Iextern/SDL/include -Iextern/SDL_image
+CXXFLAGS := -Wall -Wextra -Og -std=c++20 $(shell sdl2-config --cflags)
 LDFLAGS := $(shell sdl2-config --libs) -lSDL2_image -lSDL2_ttf
 
 TARGET_EXEC := ietto
@@ -49,6 +49,7 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 .PHONY: clean
 clean:
 	rm -r $(BUILD_DIR)
+	rm $(TARGET_EXEC)
 
 # Include the .d makefiles. The - at the front suppresses the errors of missing
 # Makefiles. Initially, all the .d files will be missing, and we don't want those

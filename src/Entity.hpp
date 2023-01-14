@@ -7,7 +7,7 @@ class Entity {
     void update(SDL_Event &event);
     inline SDL_Rect *get_frame() {return &currentFrame;};
   private:
-    double x,y;
+    int x,y;
     const int speed = 16;
     SDL_Rect currentFrame;
     SDL_Texture *texture;

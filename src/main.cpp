@@ -2,8 +2,9 @@
 #include <cstdlib>
 #include <memory>
 
-#include "RenderWindow.hpp"
 #include "Entity.hpp"
+#include "Map.hpp"
+#include "RenderWindow.hpp"
 #include "SDL.h"
 #include "SDL_events.h"
 #include "SDL_image.h"
@@ -13,8 +14,10 @@
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+const int TEXTURE_SIZE = 16;
 
-int main(int argc, char *args[]) {
+namespace SDL {
+void init() {
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     SDL_Log("Failed to initialise SDL. Error: %s\n", SDL_GetError());
   }
@@ -23,15 +26,24 @@ int main(int argc, char *args[]) {
   if (IMG_Init(IMG_init_flags) != IMG_init_flags) {
     SDL_Log("Failed to initialise IMG_Init. Error: %s\n", SDL_GetError());
   }
+} // SDL::init()
+} // namespace SDL
 
-  const int tex_size = 16;
+int main(int argc, char *args[]) {
+  SDL::init();
   auto window =
       std::make_unique<RenderWindow>("Test game", SCREEN_WIDTH, SCREEN_HEIGHT);
-  SDL_Texture *player_texture = window->loadTexture("resources/Characters/Humanoid0.png");
-  // First two positions for the rect are the starting position,
-  // the latter two are the size/dimensions of the tile
-  SDL_Rect srcRect{32, 32, 16, 16};
+  SDL_Texture *player_texture =
+      window->loadTexture("resources/Characters/Humanoid0.png");
+  SDL_Texture *floor_texture =
+      window->loadTexture("resources/Objects/Floor.png");
+  SDL_Texture *wall_texture = window->loadTexture("resources/Objects/Wall.png");
+  SDL_Rect srcRectPlayer{0, 0, TEXTURE_SIZE, TEXTURE_SIZE};
+  SDL_Rect srcRectFloor{16, 96, TEXTURE_SIZE, TEXTURE_SIZE};
+  SDL_Rect srcRectWall{16, 56, TEXTURE_SIZE, TEXTURE_SIZE};
 
+  auto map = std::make_unique<Map>(40, 30, wall_texture, floor_texture);
+  map->box();
   auto player = std::make_unique<Entity>(0, 0, player_texture);
 
   bool game_running = true;
@@ -47,16 +59,29 @@ int main(int argc, char *args[]) {
         if (ctr == 5) {
           game_running = false;
         }
-      }
-      else if (event.type == SDL_KEYDOWN){
+      } else if (event.type == SDL_KEYDOWN) {
         player->update(event);
       }
     }
     window->clear();
-    window->render(player_texture, &srcRect, player->get_frame());
+    SDL_Rect terrain{0, 0, TEXTURE_SIZE, TEXTURE_SIZE};
+    for (int i = 0; i < map->rows; ++i) {
+      for (int j = 0; j < map->cols; ++j) {
+        if (map->get(i, j) == Tile::FLOOR) {
+          window->render(floor_texture, &srcRectFloor, &terrain);
+        } else if (map->get(i,j) == Tile::WALL){
+          window->render(wall_texture, &srcRectWall, &terrain);
+        }
+        terrain.y += 16;
+      }
+      terrain.y = 0;
+      terrain.x += 16;
+    }
+    window->render(player_texture, &srcRectPlayer, player->get_frame());
     window->display();
   }
 
+  window->destroy();
   SDL_Quit();
   return 0;
 }

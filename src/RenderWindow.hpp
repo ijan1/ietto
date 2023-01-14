@@ -9,6 +9,7 @@ class RenderWindow {
   void render(SDL_Texture *texture);
   void render(SDL_Texture *texture, SDL_Rect *clip, SDL_Rect *renderQuad);
   void display();
+  void destroy();
 
  private:
   SDL_Window *window;
