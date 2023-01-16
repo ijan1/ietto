@@ -1,7 +1,9 @@
 // A single map for testing purposes
 #ifndef TILE_MAP
 #define TILE_MAP value
-const char tiles_[] =
+constexpr int ROWS = 30;
+constexpr int COLS = 40;
+constexpr char tiles_map[] =
     "########################################"
     "#______________________________________#"
     "#______________________________________#"

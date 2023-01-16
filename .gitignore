@@ -1,5 +1,6 @@
 .cache
 .clang-format
+cscope.out
 build/*
 compile_commands.json
 ietto

@@ -1,11 +1,13 @@
 #include "Engine.hpp"
+#include "SDL_events.h"
 
 Engine::Engine(const char *window_name, int w, int h)
-    : window_(nullptr),
-      renderer_(nullptr),
-      window_width_(w),
+    : window_width_(w),
       window_height_(h),
-      window_name_(window_name) {
+      window_name_(window_name),
+      window_(nullptr),
+      renderer_(nullptr),
+      map_(nullptr) {
   SDL_assert(instantiated_ == false);
 
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
@@ -36,11 +38,38 @@ Engine::~Engine() {
   destroy_window();
   destroy_renderer();
 
-  for (auto &t : textures_) {
-    SDL_DestroyTexture(t.second);
+  for (auto t : textures_) {
+    SDL_DestroyTexture(t);
   }
 
   instantiated_ = false;
+}
+
+void Engine::run() {
+  constexpr int tex_size = 16;
+  auto texture_player = load_SDL_Texture("resources/Characters/Player1.png");
+  player_ = std::make_unique<Player>(texture_player,
+                                     SDL_Rect{0, 0, tex_size, tex_size});
+
+  SDL_Event event;
+  bool game_running = true;
+
+  while (game_running) {
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_q) {
+          game_running = false;
+        }
+      }
+      player_->handle_keypress(&event);
+      player_->update(get_map());
+
+      clear();
+      render(get_map());
+      render(get_player());
+      display();
+    }
+  }
 }
 
 SDL_Texture *Engine::load_SDL_Texture(const char *filepath) {
@@ -56,13 +85,32 @@ SDL_Texture *Engine::load_SDL_Texture(const char *filepath) {
     return nullptr;
   }
 
-  std::string filepath_(filepath);
-  textures_.emplace_back(std::make_pair(filepath_, tex_));
-
+  textures_.emplace_back(tex_);
   return tex_;
 }
 
 void Engine::clear() { SDL_RenderClear(renderer_); }
+
+void Engine::render(const Map *map) {
+  for (auto &t : map->get_tiles()) {
+    render(t);
+  }
+
+  for (int i = 0; i < map->max_bound_row(); ++i) {
+    for (int j = 0; j < map->max_bound_col(); ++j) {
+      if (player_->get_x_pos() == i && player_->get_y_pos() == j) {
+        printf("@");
+      } else if (map->get_tile(i, j)->is_walkable()) {
+        printf("_");
+      } else {
+        printf("#");
+      }
+    }
+    printf("\n");
+  }
+  printf("\n\n");
+}
+
 void Engine::render(const Entity *entity) {
   int tile_size = entity->get_tile_size();
   int x = entity->get_x_pos() * tile_size;
@@ -73,12 +121,25 @@ void Engine::render(const Entity *entity) {
          const_cast<SDL_Rect *>(entity->get_srcClip()),
          &dstClip);
 }
+
 void Engine::render(SDL_Texture *tex, SDL_Rect *srcClip, SDL_Rect *dstClip) {
   SDL_RenderCopy(renderer_, tex, srcClip, dstClip);
 }
+
 void Engine::display() { SDL_RenderPresent(renderer_); }
 
 void Engine::destroy_window() { SDL_DestroyWindow(window_); }
+
 void Engine::destroy_renderer() { SDL_DestroyRenderer(renderer_); }
+
+void Engine::initialise_map() {
+  auto tile_texture_floor = load_SDL_Texture("resources/Objects/Tile.png");
+  auto tile_texture_wall = load_SDL_Texture("resources/Objects/Wall.png");
+
+  map_ = std::make_unique<Map>(tile_texture_floor, tile_texture_wall, nullptr);
+}
+
+Player *Engine::get_player() const { return player_.get(); }
+Map *Engine::get_map() const { return map_.get(); }
 
 bool Engine::instantiated_ = false; // Only 1 instance of Engine can exist

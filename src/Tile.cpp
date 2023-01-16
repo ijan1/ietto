@@ -16,4 +16,4 @@ bool Tile::is_walkable() {
   }
 }
 
-void Tile::update(std::vector<Entity *> &world) { (void)world; }
+void Tile::update(Map *map) { (void)map; }

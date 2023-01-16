@@ -11,7 +11,7 @@ class Tile : public Entity{
    Tile(enum TileType type);
    Tile(enum TileType, SDL_Texture *texture, SDL_Rect srcClip);
    bool is_walkable();
-   void update(std::vector<Entity *> &world);
+   void update(Map *map);
  private:
    TileType type_;
    // Entity entities_; does it make sense to keep track of all

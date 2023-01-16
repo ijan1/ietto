@@ -2,7 +2,7 @@
 #define PLAYER_HPP
 
 #include "Entity.hpp"
-#include "Tile.hpp"
+#include "Map.hpp"
 
 // IDEA: Could extend this into an
 // 'Action' class or an enum
@@ -19,7 +19,7 @@ class Player : public Entity {
   Player();
   Player(SDL_Texture *texture, SDL_Rect srcClip);
   void handle_keypress(SDL_Event *event);
-  void update(std::vector<Entity *> &world);
+  void update(Map *map);
 
  private:
   Direction direction_;

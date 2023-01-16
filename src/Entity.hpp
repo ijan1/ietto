@@ -7,6 +7,8 @@
 #include "SDL_image.h"
 #include "SDL_log.h"
 
+class Map;
+
 class Entity {
  public:
   Entity();
@@ -31,7 +33,7 @@ class Entity {
 
   // TODO: change from entities being passed to the
   // 'world' being passed in
-  virtual void update(std::vector<Entity *> &world) = 0;
+  virtual void update(Map *map) = 0;
 
  private:
   std::pair<int, int> coordinates_;
