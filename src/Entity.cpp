@@ -2,6 +2,12 @@
 
 #include "SDL_keycode.h"
 
+Entity::Entity()
+    : coordinates_{0, 0}, // NOTE: ? ( vs }
+      texture_(nullptr),
+      srcClip_{0, 0, 0, 0},
+      tile_size_(0) {}
+
 Entity::Entity(SDL_Texture *texture, SDL_Rect srcClip)
     : coordinates_(0, 0),
       texture_(texture), // NOTE: Assuming that h = w
@@ -39,40 +45,14 @@ void Entity::set_srcClip(int x, int y) {
   srcClip_.y = y;
 }
 
-void Entity::handle_keypress(SDL_Event *e) {
-  switch (e->type) {
-    case SDL_KEYDOWN:
-      switch (e->key.keysym.sym) {
-        case SDLK_w:
-          direction_ = Direction::NORTH;
-          break;
-        case SDLK_s:
-          direction_ = Direction::SOUTH;
-          break;
-        case SDLK_d:
-          direction_ = Direction::EAST;
-          break;
-        case SDLK_a:
-          direction_ = Direction::WEST;
-          break;
-      }
-  }
+void Entity::set_x_pos(int x) {
+  coordinates_.first = x;
 }
 
-void Entity::update() {
-  switch(direction_) {
-    case Direction::NORTH:
-      coordinates_.second -= 1;
-      break;
-    case Direction::SOUTH:
-      coordinates_.second += 1;
-      break;
-    case Direction::EAST:
-      coordinates_.first += 1;
-      break;
-    case Direction::WEST:
-      coordinates_.first -= 1;
-      break;
-  }
-  direction_ = Direction::IDLE;
+void Entity::set_y_pos(int y) {
+  coordinates_.second = y;
+}
+
+void Entity::set_tile_size(int tile_size) {
+  tile_size_ = tile_size;
 }

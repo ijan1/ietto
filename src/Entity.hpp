@@ -5,18 +5,6 @@
 
 #include "SDL_image.h"
 
-enum class Direction {
-  IDLE, // Not moving anywhere
-  NORTH,
-  SOUTH,
-  EAST,
-  WEST,
-  NORTHEAST, // TODO: something smarter?
-  SOUTHEAST, // NOTE: These don't work yet
-  NORTHWEST,
-  SOUTHWEST
-};
-
 class Entity {
  public:
   Entity();
@@ -36,12 +24,9 @@ class Entity {
   void set_y_pos(int y);
   void set_tile_size(int size);
 
-  //    virtual void update() = 0;
-  void handle_keypress(SDL_Event *event);
-  void update();
- private:
+  virtual void update() = 0;
+ protected:
   std::pair<int, int> coordinates_; // x, y
-  Direction direction_;
 
   const SDL_Texture *texture_;
   SDL_Rect srcClip_;
