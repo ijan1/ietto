@@ -4,6 +4,8 @@
 #include "Entity.hpp"
 #include "Tile.hpp"
 
+// IDEA: Could extend this into an
+// 'Action' class or an enum
 enum class Direction {
   IDLE, // IDLE
   NORTH,

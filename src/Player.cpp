@@ -2,7 +2,10 @@
 
 Player::Player() : health(100) {}
 Player::Player(SDL_Texture *texture, SDL_Rect srcClip)
-    : Entity(texture, srcClip) {}
+    : Entity(texture, srcClip)
+{
+  set_coordinates(40/2, 30/2);
+}
 
 void Player::handle_keypress(SDL_Event *e) {
   switch (e->type) {
@@ -25,9 +28,8 @@ void Player::handle_keypress(SDL_Event *e) {
 }
 
 void Player::update(std::vector<Entity *> &world) {
-  auto [x, y] = coordinates_;
-  SDL_Log("Coordinates pre-move: %d:%d\n", x,y);
-
+  // NOTE: coordinates are kept in a
+  auto [x, y] = Player::get_coordinates();
   switch (direction_) {
     case Direction::NORTH:
       y -= 1;
@@ -48,19 +50,34 @@ void Player::update(std::vector<Entity *> &world) {
       break;
   }
 
-  // TODO: keep some kind of saturation arithmetic here
-  // so that the player can't go out of bounds
+  // XXX: keep some kind of saturation arithmetic here
+  // so that the player can't go out of bounds or
+  // index out of the map and crash the game
   if (x < 0) x = 0;
   if (y < 0) y = 0;
-  if (x > 30) x = 30;
-  if (y > 40) y = 40;
+  if (x > 40) y = 40;
+  if (y > 30) x = 30;
 
-  Entity *tile = world[x * 30 + y];
-  if (static_cast<Tile *>(tile)->is_walkable()) {
-    coordinates_ = {x, y};
+  Tile *tile = static_cast<Tile *>(world[y * 40 + x]);
+  if (tile->is_walkable()) {
+    set_coordinates(x,y);
   } else {
     ;
   }
+
+  for (int i = 0; i < 30; ++i) {
+    for (int j = 0; j < 40; j++) {
+      if (x == j && y == i) {
+        printf("@");
+      } else if (static_cast<Tile *>(world[i * 40 + j])->is_walkable()) {
+        printf("_");
+      } else {
+        printf("#");
+      }
+    }
+    printf("\n");
+  }
+  printf("\n\n");
+
   direction_ = Direction::IDLE;
-  SDL_Log("Coordinates post-move: %d:%d\n\n", x,y);
 }

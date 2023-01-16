@@ -21,15 +21,13 @@ int main(int argc, char *args[]) {
       engine->load_SDL_Texture("resources/Characters/Player1.png");
   auto player = std::make_unique<Player>(
       texture_player, SDL_Rect{0, 0, TEXTURE_SIZE, TEXTURE_SIZE});
-  player->set_x_pos(1);
-  player->set_y_pos(1);
 
   auto tile_texture_floor =
       engine->load_SDL_Texture("resources/Objects/Tile.png");
   auto tile_texture_wall =
       engine->load_SDL_Texture("resources/Objects/Wall.png");
-  SDL_Rect tile_srcClip_floor{0, 0, 16, 16};
-  SDL_Rect tile_srcClip_wall{16, 64, 16, 16};
+  SDL_Rect tile_srcClip_floor{0, 0, TEXTURE_SIZE, TEXTURE_SIZE};
+  SDL_Rect tile_srcClip_wall{16, 64, TEXTURE_SIZE, TEXTURE_SIZE};
   std::vector<Entity *> tiles;
   tiles.reserve(40 * 30);
   for (int rows = 0; rows < 30; ++rows) {
