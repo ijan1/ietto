@@ -3,16 +3,18 @@
 #include "SDL_keycode.h"
 
 Entity::Entity()
-    : coordinates_{0, 0}, // NOTE: ? ( vs }
+    : coordinates_{1, 1}, // NOTE: ? ( vs }
       texture_(nullptr),
       srcClip_{0, 0, 0, 0},
       tile_size_(0) {}
 
 Entity::Entity(SDL_Texture *texture, SDL_Rect srcClip)
-    : coordinates_(0, 0),
+    : coordinates_(1, 1),
       texture_(texture), // NOTE: Assuming that h = w
       srcClip_(srcClip),
       tile_size_(srcClip.h) {}
+
+Entity::~Entity() {}
 
 const SDL_Texture *Entity::get_SDLTexture() const { return texture_; }
 const SDL_Rect *Entity::get_srcClip() const { return &srcClip_; }

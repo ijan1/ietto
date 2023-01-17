@@ -1,4 +1,5 @@
 #include "Engine.hpp"
+
 #include "SDL_events.h"
 
 Engine::Engine(const char *window_name, int w, int h)
@@ -66,6 +67,7 @@ void Engine::run() {
 
       clear();
       render(get_map());
+      render(enemy_.get());
       render(get_player());
       display();
     }
@@ -137,6 +139,12 @@ void Engine::initialise_map() {
   auto tile_texture_wall = load_SDL_Texture("resources/Objects/Wall.png");
 
   map_ = std::make_unique<Map>(tile_texture_floor, tile_texture_wall, nullptr);
+}
+
+void Engine::initialise_enemies() {
+  constexpr int tex_size = 16;
+  auto texture_enemy = load_SDL_Texture("resources/Characters/Player1.png");
+  enemy_ = std::make_unique<Enemy>(texture_enemy, SDL_Rect{16,16,tex_size,tex_size});
 }
 
 Player *Engine::get_player() const { return player_.get(); }

@@ -7,6 +7,7 @@
 #include <tuple>
 #include <vector>
 
+#include "Enemy.hpp"
 #include "Entity.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
@@ -20,7 +21,10 @@ class Engine {
   ~Engine();
 
   void run();
+  void initialise_enemies();
+  void initialise_map();
 
+ private:
   void clear();
   void render(const Entity *entity);
   void render(const Map *map);
@@ -29,17 +33,11 @@ class Engine {
   void destroy_window();
   void destroy_renderer();
 
-  void initialise_map();
-  Player *get_player() const;
   Map *get_map() const;
+  Player *get_player() const;
 
   SDL_Texture *load_SDL_Texture(const char *filepath);
 
-  // std::pair doesn't convey much information here
-  // we have the texture as the second element, but
-  // what's the first one? id? name of place? type?
-
- private:
   int window_width_;
   int window_height_;
   const char *window_name_;
@@ -49,6 +47,7 @@ class Engine {
 
   std::unique_ptr<Player> player_;
   std::unique_ptr<Map> map_;
+  std::unique_ptr<Enemy> enemy_;
 
   static bool instantiated_;
 

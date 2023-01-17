@@ -17,5 +17,6 @@ int main(int argc, char *args[]) {
                                          SCREEN_HEIGHT);
 
   engine->initialise_map();
+  engine->initialise_enemies();
   engine->run();
 } // main

@@ -13,6 +13,7 @@ class Entity {
  public:
   Entity();
   Entity(SDL_Texture *texture, SDL_Rect srcClip);
+  virtual ~Entity() = 0;
 
   const SDL_Texture *get_SDLTexture() const;
   const SDL_Rect *get_srcClip() const;

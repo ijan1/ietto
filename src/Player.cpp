@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-Player::Player() : health(100) {}
+Player::Player() : health_(100) {}
 Player::Player(SDL_Texture *texture, SDL_Rect srcClip)
     : Entity(texture, srcClip)
 {
@@ -12,16 +12,16 @@ void Player::handle_keypress(SDL_Event *e) {
     case SDL_KEYDOWN:
       switch (e->key.keysym.sym) {
         case SDLK_w:
-          direction_ = Direction::NORTH;
+          state_ = PlayerState::MOVE_NORTH;
           break;
         case SDLK_s:
-          direction_ = Direction::SOUTH;
+          state_ = PlayerState::MOVE_SOUTH;
           break;
         case SDLK_d:
-          direction_ = Direction::EAST;
+          state_ = PlayerState::MOVE_EAST;
           break;
         case SDLK_a:
-          direction_ = Direction::WEST;
+          state_ = PlayerState::MOVE_WEST;
           break;
       }
   }
@@ -30,23 +30,23 @@ void Player::handle_keypress(SDL_Event *e) {
 void Player::update(Map *map) {
   // NOTE: coordinates are kept in a
   auto [col, row] = Player::get_coordinates();
-  switch (direction_) {
-    case Direction::NORTH:
+  switch (state_) {
+    case PlayerState::MOVE_NORTH:
       row -= 1;
       break;
-    case Direction::SOUTH:
+    case PlayerState::MOVE_SOUTH:
       row += 1;
       break;
-    case Direction::EAST:
+    case PlayerState::MOVE_EAST:
       col += 1;
       break;
-    case Direction::WEST:
+    case PlayerState::MOVE_WEST:
       col -= 1;
       break;
-    case Direction::IDLE:
+    case PlayerState::IDLE:
       break;
     default:
-      direction_ = Direction::IDLE;
+      state_ = PlayerState::IDLE;
       break;
   }
 
@@ -65,5 +65,5 @@ void Player::update(Map *map) {
     ;
   }
 
-  direction_ = Direction::IDLE;
+  state_ = PlayerState::IDLE;
 }

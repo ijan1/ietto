@@ -4,14 +4,12 @@
 #include "Entity.hpp"
 #include "Map.hpp"
 
-// IDEA: Could extend this into an
-// 'Action' class or an enum
-enum class Direction {
+enum class PlayerState {
   IDLE, // IDLE
-  NORTH,
-  SOUTH,
-  EAST,
-  WEST
+  MOVE_NORTH,
+  MOVE_SOUTH,
+  MOVE_EAST,
+  MOVE_WEST
 };
 
 class Player : public Entity {
@@ -22,7 +20,7 @@ class Player : public Entity {
   void update(Map *map);
 
  private:
-  Direction direction_;
-  int health;
+  PlayerState state_;
+  int health_;
 };
 #endif /* ifndef PLAYER_HPP */
