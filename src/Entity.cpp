@@ -38,12 +38,13 @@ void Entity::set_srcClip(int x, int y) {
   srcClip_.x = x;
   srcClip_.y = y;
 }
-void Entity::set_coordinates(std::pair<int, int> coordinates) {
-  coordinates_ = coordinates;
-}
+// TODO: fix the coordinate system
+//void Entity::set_coordinates(std::pair<int, int> coordinates) {
+//  coordinates_ = coordinates;
+//}
 void Entity::set_coordinates(int x, int y) {
-  coordinates_.first = x;
-  coordinates_.second = y;
+  coordinates_.first = y;
+  coordinates_.second = x;
 }
 void Entity::set_x_pos(int x) { coordinates_.first = x; }
 void Entity::set_y_pos(int y) { coordinates_.second = y; }

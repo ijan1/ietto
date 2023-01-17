@@ -98,7 +98,7 @@ void Engine::render(const Map *map) {
 
   for (int i = 0; i < map->max_bound_row(); ++i) {
     for (int j = 0; j < map->max_bound_col(); ++j) {
-      if (player_->get_x_pos() == i && player_->get_y_pos() == j) {
+      if (player_->get_x_pos() == j && player_->get_y_pos() == i) {
         printf("@");
       } else if (map->get_tile(i, j)->is_walkable()) {
         printf("_");

@@ -29,19 +29,19 @@ void Player::handle_keypress(SDL_Event *e) {
 
 void Player::update(Map *map) {
   // NOTE: coordinates are kept in a
-  auto [r, c] = Player::get_coordinates();
+  auto [col, row] = Player::get_coordinates();
   switch (direction_) {
     case Direction::NORTH:
-      r -= 1;
+      row -= 1;
       break;
     case Direction::SOUTH:
-      r += 1;
+      row += 1;
       break;
     case Direction::EAST:
-      c += 1;
+      col += 1;
       break;
     case Direction::WEST:
-      c -= 1;
+      col -= 1;
       break;
     case Direction::IDLE:
       break;
@@ -50,17 +50,17 @@ void Player::update(Map *map) {
       break;
   }
 
-  // XXX: keep some kind of saturation arithmetic here
+  // NOTE: keep some kind of saturation arithmetic here
   // so that the player can't go out of bounds or
   // index out of the map and crash the game
   // TODO: make method
-  if (r < 0) r = 0;
-  if (c < 0) c = 0;
-  if (r > map->max_bound_row()) r = map->max_bound_row();
-  if (c > map->max_bound_col()) c = map->max_bound_col();
+  if (row < 0) row = 0;
+  if (col < 0) col = 0;
+  if (row > map->max_bound_row()) row = map->max_bound_row();
+  if (col > map->max_bound_col()) col = map->max_bound_col();
 
-  if (map->get_tile(r,c)->is_walkable()) {
-    set_coordinates(r,c);
+  if (map->get_tile(row,col)->is_walkable()) {
+    set_coordinates(row,col);
   } else {
     ;
   }
