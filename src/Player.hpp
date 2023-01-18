@@ -14,7 +14,6 @@ enum class PlayerState {
 
 class Player : public Entity {
  public:
-  Player();
   Player(const SDL_Texture *texture, SDL_Rect srcClip);
   void handle_keypress(SDL_Event *event);
   void update(Map *map);

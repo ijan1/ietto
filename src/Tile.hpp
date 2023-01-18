@@ -10,7 +10,6 @@ enum class TileType { FLOOR, WALL, RESERVED };
 
 class Tile : public Entity {
  public:
-  Tile();
   Tile(enum TileType, const SDL_Texture *texture, SDL_Rect srcClip);
   bool is_walkable();
   bool has_enemy();

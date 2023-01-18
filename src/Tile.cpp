@@ -2,7 +2,6 @@
 
 #include <memory>
 
-Tile::Tile() : type_(TileType::RESERVED), enemy_(nullptr){};
 Tile::Tile(TileType type, const SDL_Texture *texture, SDL_Rect srcClip)
     : Entity(texture, srcClip), type_(type), enemy_(nullptr) {}
 

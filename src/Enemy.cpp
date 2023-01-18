@@ -4,7 +4,6 @@
 
 #include "Map.hpp"
 
-Enemy::Enemy() : state_(EnemyState::IDLE), health_(100) {}
 Enemy::Enemy(const SDL_Texture *texture, SDL_Rect srcClip)
     : Entity(texture, srcClip), state_(EnemyState::IDLE){};
 
@@ -13,8 +12,8 @@ void Enemy::update(Map *map) {
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> distrib(1, 10);
 
-  int old_x = get_x_pos();
-  int old_y = get_y_pos();
+  int old_x = get_x();
+  int old_y = get_y();
   Tile *current_tile = map->get_tile(old_x, old_y);
   SDL_Log("Currently on tile: %d:%d\n", old_x, old_y);
 

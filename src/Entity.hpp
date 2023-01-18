@@ -11,29 +11,25 @@ class Map;
 
 class Entity {
  public:
-  Entity(); // TODO: delete
   Entity(const SDL_Texture *texture, SDL_Rect srcClip);
   virtual ~Entity() = 0;
 
   const SDL_Texture *get_SDLTexture() const;
   const SDL_Rect *get_srcClip() const;
   std::pair<int, int> get_coordinates() const;
-  int get_x_pos() const;
-  int get_y_pos() const;
+  int get_x() const;
+  int get_y() const;
   int get_tile_size() const;
 
   void set_SDLTexture(const SDL_Texture *);
   void set_srcClip(SDL_Rect srcRect);
   void set_srcClip(int x, int y, int h, int w);
-  void set_srcClip(int x, int y);
   void set_coordinates(int x, int y);
   void set_coordinates(std::pair<int, int> coordinates);
-  void set_x_pos(int x);
-  void set_y_pos(int y);
+  void set_x(int x);
+  void set_y(int y);
   void set_tile_size(int size);
 
-  // TODO: change from entities being passed to the
-  // 'world' being passed in
   virtual void update(Map *map) = 0;
 
  private:

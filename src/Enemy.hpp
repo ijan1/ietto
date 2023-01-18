@@ -12,7 +12,6 @@ enum class EnemyState {
 
 class Enemy : public Entity {
  public:
-  Enemy();
   Enemy(const SDL_Texture *texture, SDL_Rect srcClip);
   void update(Map *world);
 

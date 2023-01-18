@@ -12,8 +12,8 @@ class Map {
   std::vector<Tile *> get_tiles() const;
   Tile *get_tile(int x, int y) const;
   void set_tile(int x, int y, Tile *tile);
-  int max_bound_row() const;
-  int max_bound_col() const;
+  int max_bound_x() const;
+  int max_bound_y() const;
 
  private:
   // TODO: combine all of these different

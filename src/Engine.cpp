@@ -108,13 +108,13 @@ void Engine::render(const Map *map) {
     render(t->get_enemy());
   }
 
-  for (int i = 0; i < map->max_bound_row(); ++i) {
-    for (int j = 0; j < map->max_bound_col(); ++j) {
-      if (player_->get_x_pos() == j && player_->get_y_pos() == i) {
+  for (int x = 0; x < map->max_bound_x(); ++x) {
+    for (int y = 0; y < map->max_bound_y(); ++y) {
+      if (player_->get_x() == x && player_->get_y() == y) {
         printf("@");
-      } else if (map->get_tile(i, j)->has_enemy()) {
+      } else if (map->get_tile(x, y)->has_enemy()) {
         printf("e");
-      } else if (map->get_tile(i, j)->is_walkable()) {
+      } else if (map->get_tile(x, y)->is_walkable()) {
         printf("_");
       } else {
         printf("#");
@@ -131,9 +131,10 @@ void Engine::render(const Entity *entity) {
   }
 
   int tile_size = entity->get_tile_size();
-  int x = entity->get_x_pos() * tile_size;
-  int y = entity->get_y_pos() * tile_size;
-  SDL_Rect dstClip{x, y, tile_size, tile_size};
+  int x = entity->get_x() * tile_size;
+  int y = entity->get_y() * tile_size;
+  // NOTE: this has to be flipped
+  SDL_Rect dstClip{y, x, tile_size, tile_size};
 
   render(const_cast<SDL_Texture *>(entity->get_SDLTexture()),
          const_cast<SDL_Rect *>(entity->get_srcClip()), &dstClip);
