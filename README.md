@@ -16,4 +16,9 @@ particularly by using modern C++. In addition to that, learning more
 about rendering, managing a bigger project and perseverance.
 
 # Bugs
-- The player movement system is disconnected from the rendered frame
+- None this patch
+# TODO
+- Add Tiles and map
+- Movement
+- Enemies
+- Combat

@@ -1,36 +1,48 @@
 #include "Tile.hpp"
 
-#include <memory>
+Tile::Tile(const SDL_Texture *tex, TileType type_, Position pos)
+    : position(pos),
+      type(type_),
+      actor(nullptr),
+      texture(tex),
+      srcClip{0, 0, 16, 16} {}
 
-Tile::Tile(TileType type, const SDL_Texture *texture, SDL_Rect srcClip)
-    : Entity(texture, srcClip), type_(type), enemy_(nullptr) {}
+const Position Tile::get_position() const { return position; }
 
-bool Tile::is_walkable() {
-  switch (type_) {
-    case TileType::FLOOR:
-      return true;
-    case TileType::WALL:
-      return false;
-    default:
-      return false;
+void Tile::set_position(Position pos) { position = pos; }
+
+TileType Tile::get_tileType() const { return type; }
+
+void Tile::set_tiletype(TileType t) { type = t; }
+
+Actor *Tile::get_actor() const { return actor; }
+
+void Tile::set_actor(Actor *a) { actor = a; }
+
+bool Tile::is_walkable() const {
+  if (Tile::has_actor()) {
+    return false;
   }
+
+  if (type != TileType::FLOOR) {
+    return false;
+  }
+
+  return true;
 }
 
-bool Tile::has_enemy() {
-  if (enemy_) {
+bool Tile::has_actor() const {
+  if (actor) {
     return true;
   }
 
   return false;
 }
 
-Enemy *Tile::get_enemy() { return enemy_; }
+void Tile::set_texture(const SDL_Texture *texture_) { texture = texture_; }
 
-void Tile::set_enemy(Enemy *enemy) { enemy_ = enemy; }
+const SDL_Texture *Tile::get_texture() const { return texture; }
 
-void Tile::move_enemy_to(Tile *new_tile) {
-  new_tile->set_enemy(enemy_);
-  enemy_ = nullptr;
-}
+SDL_Rect Tile::get_srcClip() const { return srcClip; }
 
-void Tile::update(Map *map) { (void)map; }
+void Tile::set_srcClip(const SDL_Rect &srcClip_) { srcClip = srcClip_; }

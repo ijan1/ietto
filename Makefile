@@ -1,8 +1,8 @@
 CC := gcc
 CXX := g++
-CFLAGS := -Wall -Wextra -Og
-CXXFLAGS := -Wall -Wextra -Wno-c++17-extensions -Og -std=c++20 $(shell sdl2-config --cflags) -Iinclude
-LDFLAGS := $(shell sdl2-config --libs) -lSDL2_image -lSDL2_ttf
+CFLAGS := -Wall -Wextra -O2g -ggdb3
+CXXFLAGS := -Wall -Wextra -Wno-c++17-extensions -O2 -ggdb3 -std=c++20 $(shell sdl2-config --cflags) -Iinclude
+LDFLAGS := $(shell sdl2-config --libs) -lSDL2_image
 
 TARGET_EXEC := ietto
 

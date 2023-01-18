@@ -1,67 +1,68 @@
 #include "Player.hpp"
 
-Player::Player(const SDL_Texture *texture, SDL_Rect srcClip)
-    : Entity(texture, srcClip) {
-  set_coordinates({40 / 2, 30 / 2});
+Player::Player(const SDL_Texture *texture, const SDL_Rect &srcClip)
+    : Actor(texture, srcClip), direction(Direction::IDLE) {}
+Player::~Player() {}
+
+void Player::set_stage(Map *stage_) {
+  stage = stage_;
 }
 
-void Player::handle_keypress(SDL_Event *e) {
-  switch (e->type) {
+void Player::handle_keypress(SDL_Event &e) {
+  switch (e.type) {
     case SDL_KEYDOWN:
-      switch (e->key.keysym.sym) {
+      switch (e.key.keysym.sym) {
         case SDLK_w:
-          state_ = PlayerState::MOVE_NORTH;
+          direction = direction | Direction::MOVE_NORTH;
           break;
         case SDLK_s:
-          state_ = PlayerState::MOVE_SOUTH;
+          direction = direction | Direction::MOVE_SOUTH;
           break;
         case SDLK_d:
-          state_ = PlayerState::MOVE_EAST;
+          direction = direction | Direction::MOVE_EAST;
           break;
         case SDLK_a:
-          state_ = PlayerState::MOVE_WEST;
+          direction = direction | Direction::MOVE_WEST;
           break;
       }
   }
 }
 
-void Player::update(Map *map) {
-  // NOTE: it's better to think of this as (row,col), rather
-  // than coordinates in a point
-  auto [x, y] = Player::get_coordinates();
-  switch (state_) {
-    case PlayerState::MOVE_NORTH:
-      x -= 1;
+void Player::update() {
+  Position new_pos = Player::get_position();
+  switch (direction) {
+    case Direction::MOVE_NORTH:
+      new_pos = new_pos + Position{-1, 0};
       break;
-    case PlayerState::MOVE_SOUTH:
-      x += 1;
+    case Direction::MOVE_SOUTH:
+      new_pos = new_pos + Position{1, 0};
       break;
-    case PlayerState::MOVE_EAST:
-      y += 1;
+    case Direction::MOVE_EAST:
+      new_pos = new_pos + Position{0, 1};
       break;
-    case PlayerState::MOVE_WEST:
-      y -= 1;
+    case Direction::MOVE_WEST:
+      new_pos = new_pos + Position{0, -1};
       break;
-    default:
-      state_ = PlayerState::IDLE;
+    case Direction::MOVE_NORTHEAST:
+      new_pos = new_pos + Position{-1, 1};
+      break;
+    case Direction::MOVE_NORTHWEST:
+      new_pos = new_pos + Position{-1, -1};
+      break;
+    case Direction::MOVE_SOUTHEAST:
+      new_pos = new_pos + Position{1, 1};
+      break;
+    case Direction::MOVE_SOUTHWEST:
+      new_pos = new_pos + Position{1, -1};
+      break;
+    case Direction::IDLE:
       break;
   }
+  Player::direction = Direction::IDLE;
 
-  // NOTE: keep some kind of saturation arithmetic here
-  // so that the player can't go out of bounds or
-  // index out of the map and crash the game
-  y = std::max(0, y);
-  x = std::max(0, x);
-  y = std::min(y, map->max_bound_y());
-  x = std::min(x, map->max_bound_x());
-
-  if (map->get_tile(x, y)->has_enemy()) {
-    SDL_Log("You got into a fight.");
-  } else if (map->get_tile(x, y)->is_walkable()) {
-    set_coordinates({x, y});
+  if (stage->get_tile(new_pos)->is_walkable()) {
+    Player::set_position(new_pos);
   } else {
     ;
   }
-
-  state_ = PlayerState::IDLE;
 }
