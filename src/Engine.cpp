@@ -69,6 +69,9 @@ void Engine::run() {
 
         clear();
         render(get_map());
+        for(auto &e : enemies_) {
+          render(e.get());
+        }
         render(get_player());
         display();
       }
@@ -100,12 +103,9 @@ const SDL_Texture *Engine::load_SDL_Texture(const char *filepath) {
 
 void Engine::clear() { SDL_RenderClear(renderer_.get()); }
 
-void Engine::render(const Map *map) {
-  for (auto &t : map->get_tiles()) {
-    // Render the tile itself
+void Engine::render(Map *map) {
+  for (auto t : map->get_tiles()) {
     render(t);
-    // Render any enemy on the tile
-    render(t->get_enemy());
   }
 
   for (int x = 0; x < map->max_bound_x(); ++x) {

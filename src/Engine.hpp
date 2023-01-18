@@ -41,7 +41,7 @@ class Engine {
  private:
   void clear();
   void render(const Entity *entity);
-  void render(const Map *map);
+  void render(Map *map);
   void render(SDL_Texture *texture, SDL_Rect *srcClip, SDL_Rect *dstClip);
   void display();
 

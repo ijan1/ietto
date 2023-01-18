@@ -22,19 +22,8 @@ void Entity::set_srcClip(SDL_Rect srcClip) {
   srcClip_.h = srcClip.h;
   srcClip_.w = srcClip.w;
 }
-void Entity::set_srcClip(int x, int y, int h, int w) {
-  srcClip_.x = x;
-  srcClip_.y = y;
-  srcClip_.h = h;
-  srcClip_.w = w;
-}
-// TODO: fix the coordinate system
-// void Entity::set_coordinates(std::pair<int, int> coordinates) {
-//  coordinates_ = coordinates;
-//}
-void Entity::set_coordinates(int x, int y) {
-  coordinates_.first = x;
-  coordinates_.second = y;
+void Entity::set_coordinates(std::pair<int, int> coordinates) {
+  coordinates_ = coordinates;
 }
 void Entity::set_x(int x) { coordinates_.first = x; }
 void Entity::set_y(int y) { coordinates_.second = y; }

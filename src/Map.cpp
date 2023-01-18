@@ -35,7 +35,7 @@ Map::Map(const SDL_Texture *texture_floor, const SDL_Texture *texture_wall,
   }
 }
 
-std::vector<Tile *> Map::get_tiles() const { return tiles_; }
+std::vector<Tile *> &Map::get_tiles() { return tiles_; }
 
 Tile *Map::get_tile(int x, int y) const {
   if (x >= max_bound_x() || y >= max_bound_y()) {

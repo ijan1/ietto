@@ -9,7 +9,7 @@ class Map {
   Map(const SDL_Texture *texture_floor, const SDL_Texture *texture_wall,
       const SDL_Texture *texture_water);
 
-  std::vector<Tile *> get_tiles() const;
+  std::vector<Tile *> &get_tiles();
   Tile *get_tile(int x, int y) const;
   void set_tile(int x, int y, Tile *tile);
   int max_bound_x() const;

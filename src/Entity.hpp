@@ -23,8 +23,6 @@ class Entity {
 
   void set_SDLTexture(const SDL_Texture *);
   void set_srcClip(SDL_Rect srcRect);
-  void set_srcClip(int x, int y, int h, int w);
-  void set_coordinates(int x, int y);
   void set_coordinates(std::pair<int, int> coordinates);
   void set_x(int x);
   void set_y(int y);
