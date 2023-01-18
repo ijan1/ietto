@@ -1,14 +1,14 @@
 #include "Entity.hpp"
 
-#include "SDL_keycode.h"
-
+// Is there a point to keeping a default
+// constructor?
 Entity::Entity()
     : coordinates_{1, 1}, // NOTE: ? ( vs }
       texture_(nullptr),
       srcClip_{0, 0, 0, 0},
       tile_size_(0) {}
 
-Entity::Entity(SDL_Texture *texture, SDL_Rect srcClip)
+Entity::Entity(const SDL_Texture *texture, SDL_Rect srcClip)
     : coordinates_(1, 1),
       texture_(texture), // NOTE: Assuming that h = w
       srcClip_(srcClip),
@@ -41,7 +41,7 @@ void Entity::set_srcClip(int x, int y) {
   srcClip_.y = y;
 }
 // TODO: fix the coordinate system
-//void Entity::set_coordinates(std::pair<int, int> coordinates) {
+// void Entity::set_coordinates(std::pair<int, int> coordinates) {
 //  coordinates_ = coordinates;
 //}
 void Entity::set_coordinates(int x, int y) {

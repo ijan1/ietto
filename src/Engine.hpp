@@ -15,6 +15,20 @@
 #include "SDL_assert.h"
 #include "SDL_image.h"
 
+struct SDL_TextureDestroyer {
+  void operator()(SDL_Texture *p) { SDL_DestroyTexture(p); }
+};
+struct SDL_WindowDestroyer {
+  void operator()(SDL_Window *p) { SDL_DestroyWindow(p); }
+};
+struct SDL_RendererDestroyer {
+  void operator()(SDL_Renderer *p) { SDL_DestroyRenderer(p); }
+};
+
+using SDL_Texture_ptr = std::unique_ptr<SDL_Texture, SDL_TextureDestroyer>;
+using SDL_Window_ptr = std::unique_ptr<SDL_Window, SDL_WindowDestroyer>;
+using SDL_Renderer_ptr = std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer>;
+
 class Engine {
  public:
   Engine(const char *window_name, int window_width, int window_height);
@@ -30,30 +44,25 @@ class Engine {
   void render(const Map *map);
   void render(SDL_Texture *texture, SDL_Rect *srcClip, SDL_Rect *dstClip);
   void display();
-  void destroy_window();
-  void destroy_renderer();
 
   Map *get_map() const;
   Player *get_player() const;
 
-  SDL_Texture *load_SDL_Texture(const char *filepath);
+  const SDL_Texture *load_SDL_Texture(const char *filepath);
 
   int window_width_;
   int window_height_;
   const char *window_name_;
-  SDL_Window *window_;
-  SDL_Renderer *renderer_;
-  std::vector<SDL_Texture *> textures_;
+  SDL_Window_ptr window_;
+  SDL_Renderer_ptr renderer_;
 
-  std::unique_ptr<Player> player_;
+  std::vector<SDL_Texture_ptr> textures_;
+
   std::unique_ptr<Map> map_;
-  std::unique_ptr<Enemy> enemy_;
+  std::unique_ptr<Player> player_;
+  std::vector<std::unique_ptr<Enemy>> enemies_;
 
   static bool instantiated_;
-
-  // TODO: maybe have all the texture stored in a map in here,
-  // and then each entity can request its own texture based on
-  // json information
 };
 
 #endif /* ifndef ENGINE_HPP */

@@ -11,8 +11,8 @@ class Map;
 
 class Entity {
  public:
-  Entity();
-  Entity(SDL_Texture *texture, SDL_Rect srcClip);
+  Entity(); // TODO: delete
+  Entity(const SDL_Texture *texture, SDL_Rect srcClip);
   virtual ~Entity() = 0;
 
   const SDL_Texture *get_SDLTexture() const;

@@ -2,12 +2,11 @@
 
 constexpr int TEXTURE_SIZE = 16;
 
-Map::Map(SDL_Texture *texture_floor, SDL_Texture *texture_wall,
-         SDL_Texture *texture_water)
+Map::Map(const SDL_Texture *texture_floor, const SDL_Texture *texture_wall,
+         const SDL_Texture *texture_water)
     : texture_floor_(texture_floor),
       texture_wall_(texture_wall),
       texture_water_(texture_water) {
-
   SDL_Log("Initialising default map from tiles.hpp");
 
   tiles_.reserve(ROWS * COLS);
@@ -33,9 +32,7 @@ Map::Map(SDL_Texture *texture_floor, SDL_Texture *texture_wall,
   }
 }
 
-std::vector<Tile *> Map::get_tiles() const {
-  return tiles_;
-}
+std::vector<Tile *> Map::get_tiles() const { return tiles_; }
 
 Tile *Map::get_tile(int x, int y) const {
   if (x >= max_bound_row() || y >= max_bound_col()) {
@@ -43,14 +40,9 @@ Tile *Map::get_tile(int x, int y) const {
     return nullptr;
   }
 
-  return tiles_[x*max_bound_col()+y];
+  return tiles_[x * max_bound_col() + y];
 }
 
-int Map::max_bound_row() const {
-  return dimensions_.first;
-}
+int Map::max_bound_row() const { return dimensions_.first; }
 
-int Map::max_bound_col() const {
-  return dimensions_.second;
-}
-
+int Map::max_bound_col() const { return dimensions_.second; }

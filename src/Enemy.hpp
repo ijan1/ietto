@@ -1,6 +1,8 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
+#include <random>
+
 #include "Entity.hpp"
 
 enum class EnemyState {
@@ -8,15 +10,15 @@ enum class EnemyState {
   WANDERING,
 };
 
-class Enemy : public Entity{
-  public:
-    Enemy();
-    Enemy(SDL_Texture *texture, SDL_Rect srcClip);
-    void update(Map *world);
+class Enemy : public Entity {
+ public:
+  Enemy();
+  Enemy(const SDL_Texture *texture, SDL_Rect srcClip);
+  void update(Map *world);
 
-  private:
-    EnemyState state_;
-    int health_;
+ private:
+  EnemyState state_;
+  int health_;
 };
 
 #endif /* ifndef ENEMY_HPP */

@@ -1,5 +1,7 @@
 #include "Engine.hpp"
 
+#include <memory>
+
 #include "SDL_events.h"
 
 Engine::Engine(const char *window_name, int w, int h)
@@ -20,14 +22,15 @@ Engine::Engine(const char *window_name, int w, int h)
     SDL_Log("Failed to initialise IMG_Init. Error: %s\n", SDL_GetError());
   }
 
-  window_ = SDL_CreateWindow(window_name_, SDL_WINDOWPOS_UNDEFINED,
-                             SDL_WINDOWPOS_UNDEFINED, window_width_,
-                             window_height_, SDL_WINDOW_SHOWN);
+  window_ = SDL_Window_ptr(SDL_CreateWindow(
+      window_name_, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+      window_width_, window_height_, SDL_WINDOW_SHOWN));
   if (!window_) {
     SDL_Log("Failed to initialise a window. Error: %s\n", SDL_GetError());
   }
 
-  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC);
+  renderer_ = SDL_Renderer_ptr(
+      SDL_CreateRenderer(window_.get(), -1, SDL_RENDERER_PRESENTVSYNC));
   if (!renderer_) {
     SDL_Log("Failed to initialise the renderer. Error: %s\n", SDL_GetError());
   }
@@ -36,13 +39,8 @@ Engine::Engine(const char *window_name, int w, int h)
 }
 
 Engine::~Engine() {
-  destroy_window();
-  destroy_renderer();
-
-  for (auto t : textures_) {
-    SDL_DestroyTexture(t);
-  }
-
+  // Everything is wrapped in unique_ptrs, so
+  // there shouldn't be anything left to be destroyed
   instantiated_ = false;
 }
 
@@ -61,47 +59,61 @@ void Engine::run() {
         if (event.key.keysym.sym == SDLK_q) {
           game_running = false;
         }
-      }
-      player_->handle_keypress(&event);
-      player_->update(get_map());
+        player_->handle_keypress(&event);
+        player_->update(get_map());
 
-      clear();
-      render(get_map());
-      render(enemy_.get());
-      render(get_player());
-      display();
+        // Update enemies
+        for (auto &e : enemies_) {
+          e->update(get_map());
+        }
+
+        clear();
+        render(get_map());
+        render(get_player());
+        display();
+      }
     }
   }
 }
 
-SDL_Texture *Engine::load_SDL_Texture(const char *filepath) {
+const SDL_Texture *Engine::load_SDL_Texture(const char *filepath) {
   SDL_Texture *tex_ = nullptr;
-
   if (!filepath) {
     SDL_Log("An empty string has been passed\n.");
+    return nullptr;
   }
-  tex_ = IMG_LoadTexture(renderer_, filepath);
+
+  tex_ = IMG_LoadTexture(renderer_.get(), filepath);
+  SDL_Texture_ptr texture_ = SDL_Texture_ptr(tex_);
 
   if (!tex_) {
     SDL_Log("Failed to load texture %s. Error: %s\n", filepath, SDL_GetError());
     return nullptr;
   }
 
-  textures_.emplace_back(tex_);
+  // TODO: figure out what's going on here
+  // i can't return the smart pointer without
+  // it going out of scope for some reason
+  textures_.push_back(std::move(texture_));
   return tex_;
 }
 
-void Engine::clear() { SDL_RenderClear(renderer_); }
+void Engine::clear() { SDL_RenderClear(renderer_.get()); }
 
 void Engine::render(const Map *map) {
   for (auto &t : map->get_tiles()) {
+    // Render the tile itself
     render(t);
+    // Render any enemy on the tile
+    render(t->get_enemy());
   }
 
   for (int i = 0; i < map->max_bound_row(); ++i) {
     for (int j = 0; j < map->max_bound_col(); ++j) {
       if (player_->get_x_pos() == j && player_->get_y_pos() == i) {
         printf("@");
+      } else if (map->get_tile(i, j)->has_enemy()) {
+        printf("e");
       } else if (map->get_tile(i, j)->is_walkable()) {
         printf("_");
       } else {
@@ -114,25 +126,24 @@ void Engine::render(const Map *map) {
 }
 
 void Engine::render(const Entity *entity) {
+  if (entity == nullptr) {
+    return;
+  }
+
   int tile_size = entity->get_tile_size();
   int x = entity->get_x_pos() * tile_size;
   int y = entity->get_y_pos() * tile_size;
   SDL_Rect dstClip{x, y, tile_size, tile_size};
 
   render(const_cast<SDL_Texture *>(entity->get_SDLTexture()),
-         const_cast<SDL_Rect *>(entity->get_srcClip()),
-         &dstClip);
+         const_cast<SDL_Rect *>(entity->get_srcClip()), &dstClip);
 }
 
 void Engine::render(SDL_Texture *tex, SDL_Rect *srcClip, SDL_Rect *dstClip) {
-  SDL_RenderCopy(renderer_, tex, srcClip, dstClip);
+  SDL_RenderCopy(renderer_.get(), tex, srcClip, dstClip);
 }
 
-void Engine::display() { SDL_RenderPresent(renderer_); }
-
-void Engine::destroy_window() { SDL_DestroyWindow(window_); }
-
-void Engine::destroy_renderer() { SDL_DestroyRenderer(renderer_); }
+void Engine::display() { SDL_RenderPresent(renderer_.get()); }
 
 void Engine::initialise_map() {
   auto tile_texture_floor = load_SDL_Texture("resources/Objects/Tile.png");
@@ -144,7 +155,10 @@ void Engine::initialise_map() {
 void Engine::initialise_enemies() {
   constexpr int tex_size = 16;
   auto texture_enemy = load_SDL_Texture("resources/Characters/Player1.png");
-  enemy_ = std::make_unique<Enemy>(texture_enemy, SDL_Rect{16,16,tex_size,tex_size});
+  auto enemy_ = std::make_unique<Enemy>(texture_enemy,
+                                        SDL_Rect{16, 16, tex_size, tex_size});
+  map_->get_tile(1, 1)->set_enemy(enemy_.get());
+  enemies_.push_back(std::move(enemy_));
 }
 
 Player *Engine::get_player() const { return player_.get(); }
