@@ -3,14 +3,17 @@
 #include "Map.hpp"
 #include "Position.hpp"
 
-Actor::Actor(const SDL_Texture *texture_, const SDL_Rect &srcClip_)
-    : health(100),
+Actor::Actor(const SDL_Texture *texture_, const SDL_Rect &srcClip_,
+             std::string name_)
+    : name(name_),
+      health(100),
       maxHealth(100),
       position{1, 1},
       texture(texture_),
       srcClip(srcClip_) {}
 Actor::~Actor() = default;
 
+std::string_view Actor::get_name() const { return name; }
 int Actor::get_current_health() const { return health; }
 void Actor::set_current_health(const int health_) { health = health_; }
 int Actor::get_max_health() const { return maxHealth; }

@@ -44,9 +44,9 @@ class Engine {
   static constexpr float GAME_FPS = 60.0;
   static uint32_t start_time, end_time, delta_time;
 
-  SDL_Window_ptr window;
-  SDL_Renderer_ptr renderer;
-  std::vector<SDL_Texture_ptr> textures;
+  SDL::Window_ptr window;
+  SDL::Renderer_ptr renderer;
+  std::vector<SDL::Texture_ptr> textures;
 
   std::unique_ptr<Player> player;
   std::vector<std::unique_ptr<Actor>> enemies; // used for event queue

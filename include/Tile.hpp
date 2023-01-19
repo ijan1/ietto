@@ -13,7 +13,7 @@ class Tile {
   const Position get_position() const;
   void set_position(Position pos);
   TileType get_tileType() const;
-  void set_tiletype(TileType type);
+  void set_tileType(TileType type);
   Actor *get_actor() const;
   void set_actor(Actor *actor);
 

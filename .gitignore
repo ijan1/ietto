@@ -1,6 +1,8 @@
 .cache
 .clang-format
+.idea
 cscope.out
+cmake-build-debug
 build/*
 compile_commands.json
 ietto

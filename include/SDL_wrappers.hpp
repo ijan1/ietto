@@ -7,21 +7,23 @@
 #include "SDL_events.h"
 #include "SDL_image.h"
 
-struct SDL_TextureDestroyer {
+namespace SDL {
+
+struct TextureDestroyer {
   void operator()(SDL_Texture *p) { SDL_DestroyTexture(p); }
 };
-struct SDL_WindowDestroyer {
+struct WindowDestroyer {
   void operator()(SDL_Window *p) { SDL_DestroyWindow(p); }
 };
-struct SDL_RendererDestroyer {
+struct RendererDestroyer {
   void operator()(SDL_Renderer *p) { SDL_DestroyRenderer(p); }
 };
 
-using SDL_Texture_ptr = std::unique_ptr<SDL_Texture, SDL_TextureDestroyer>;
-using SDL_Window_ptr = std::unique_ptr<SDL_Window, SDL_WindowDestroyer>;
-using SDL_Renderer_ptr = std::unique_ptr<SDL_Renderer, SDL_RendererDestroyer>;
+using Texture_ptr = std::unique_ptr<SDL_Texture, TextureDestroyer>;
+using Window_ptr = std::unique_ptr<SDL_Window, WindowDestroyer>;
+using Renderer_ptr = std::unique_ptr<SDL_Renderer, RendererDestroyer>;
 
-inline void init_SDL() {
+inline void init() {
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     SDL_Log("Failed to initialise SDL. Error: %s\n", SDL_GetError());
   }
@@ -32,4 +34,5 @@ inline void init_SDL() {
   }
 }
 
+} // namespace SDL
 #endif /* ifndef SDL_WRAPPERS_HPP */

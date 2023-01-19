@@ -22,12 +22,20 @@ void Map::initialise_default_map() {
   }   // r < ROWS
 }
 
+int Map::get_width() { return width; }
+
+int Map::get_height() { return height; }
+
+bool Map::tile_has_actor(const Position pos) {
+  return Map::get_tile(pos)->has_actor();
+}
+
 std::vector<std::unique_ptr<Tile>> &Map::get_tiles() { return tiles; }
 
 Tile *Map::get_tile(const Position &pos) const {
   auto [x, y] = pos;
   if ((x >= Map::height) || (y >= Map::width) || (x < 0) || (y < 0)) {
-    SDL_Log("Attemping to index map out of range.\n");
+    SDL_Log("Attempting to index map out of range.\n");
     return nullptr;
   }
   return tiles[x * width + y].get();

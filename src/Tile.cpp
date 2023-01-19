@@ -13,7 +13,7 @@ void Tile::set_position(Position pos) { position = pos; }
 
 TileType Tile::get_tileType() const { return type; }
 
-void Tile::set_tiletype(TileType t) { type = t; }
+void Tile::set_tileType(TileType t) { type = t; }
 
 Actor *Tile::get_actor() const { return actor; }
 

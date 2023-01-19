@@ -1,6 +1,8 @@
 #ifndef ACTOR_HPP
 #define ACTOR_HPP
 
+#include <string_view>
+
 #include "Position.hpp"
 #include "SDL_wrappers.hpp"
 
@@ -8,9 +10,12 @@ class Map;
 
 class Actor {
  public:
-  Actor(const SDL_Texture *texture, const SDL_Rect &srcClip);
+  Actor(const SDL_Texture *texture, const SDL_Rect &srcClip,
+        std::string = {"Enemy"});
   virtual ~Actor() = 0;
 
+  std::string_view get_name() const;
+  void set_name(std::string name); // TODO: don't pass in a string
   int get_current_health() const;
   void set_current_health(const int health);
   int get_max_health() const;
@@ -23,7 +28,7 @@ class Actor {
   void move_to(const Position pos);
 
   Map *get_stage() const;
-  void set_stage(Map *stage);
+  static void set_stage(Map *stage);
 
   virtual void update() = 0;
 
@@ -32,7 +37,9 @@ class Actor {
   const SDL_Rect get_srcClip() const;
   void set_srcClip(const SDL_Rect &srcClip);
 
- private:
+ protected:
+  std::string name;
+
   int health;
   int maxHealth;
   Position position;

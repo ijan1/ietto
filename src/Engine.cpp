@@ -13,9 +13,9 @@ Engine::Engine(const char *name_, int width_, int height_)
       player(nullptr) {
   SDL_assert(instantiated == false);
 
-  init_SDL();
+  SDL::init();
 
-  window = SDL_Window_ptr(SDL_CreateWindow(
+  window = SDL::Window_ptr(SDL_CreateWindow(
       window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
       window_width, window_height, SDL_WINDOW_SHOWN));
   if (!window) {
@@ -25,7 +25,7 @@ Engine::Engine(const char *name_, int width_, int height_)
   // TODO: look into the following:
   // Disable VSYNC because performance plummets when using mouse and
   // and keyboard
-  renderer = SDL_Renderer_ptr(
+  renderer = SDL::Renderer_ptr(
       SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_PRESENTVSYNC));
   if (!renderer) {
     SDL_Log("Failed to initialise the renderer. Error: %s\n", SDL_GetError());
@@ -44,8 +44,8 @@ void Engine::init_stage() {
       Engine::load_texture("resources/Objects/Wall.png");
   stage = std::make_unique<Map>(texture_floor, texture_wall);
   stage->initialise_default_map();
-  SDL_Log("Initialised default stage. Stage size: %zu\n",
-          stage->get_tiles().size());
+  SDL_Log("Initialised default stage. Stage size: %d:%d\n", stage->get_width(),
+          stage->get_height());
 }
 
 void Engine::init_player() {
@@ -69,7 +69,7 @@ void Engine::run() {
   init_stage();
   init_player();
   init_enemy();
-  player->set_stage(stage.get());
+  Actor::set_stage(stage.get());
 
   while (game_running) {
     while (SDL_PollEvent(&event)) {
@@ -79,9 +79,11 @@ void Engine::run() {
       }
 
       Engine::clear();
-
       render();
-      update();
+
+      if (event.key.type == SDL_KEYDOWN) {
+        update();
+      }
 
       Engine::display();
     }
@@ -111,8 +113,8 @@ const SDL_Texture *Engine::load_texture(const char *filepath) {
     SDL_Log("Cannot load texture. No filepath has been passed in.\n");
   }
 
-  SDL_Texture_ptr tex =
-      SDL_Texture_ptr(IMG_LoadTexture(renderer.get(), filepath));
+  SDL::Texture_ptr tex =
+      SDL::Texture_ptr(IMG_LoadTexture(renderer.get(), filepath));
 
   if (!tex) {
     SDL_Log("Failed to load texture: %s\n", filepath);

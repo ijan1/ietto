@@ -13,6 +13,11 @@ class Map {
 
   void initialise_default_map();
 
+  int get_width();
+  int get_height();
+
+  bool tile_has_actor(const Position pos);
+
   std::vector<std::unique_ptr<Tile>> &get_tiles();
   Tile *get_tile(const Position &pos) const;
   void set_tile(Tile &&t); // NOTE: is this right?

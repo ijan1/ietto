@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
 Player::Player(const SDL_Texture *texture, const SDL_Rect &srcClip)
-    : Actor(texture, srcClip), direction(Direction::IDLE) {}
+    : Actor(texture, srcClip, "Player"), direction(Direction::IDLE) {}
 
 void Player::handle_keypress(SDL_Event &e) {
   switch (e.type) {
@@ -54,6 +54,11 @@ void Player::update() {
       break;
   }
   Player::direction = Direction::IDLE;
+
+  if (stage->tile_has_actor(new_pos)) {
+    SDL_Log("You got into combat with %s\n",
+            stage->get_tile(new_pos)->get_actor()->get_name().data());
+  }
 
   if (Player::can_move_to(new_pos)) {
     Player::move_to(new_pos);
