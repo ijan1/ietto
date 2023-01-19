@@ -2,11 +2,6 @@
 
 Player::Player(const SDL_Texture *texture, const SDL_Rect &srcClip)
     : Actor(texture, srcClip), direction(Direction::IDLE) {}
-Player::~Player() {}
-
-void Player::set_stage(Map *stage_) {
-  stage = stage_;
-}
 
 void Player::handle_keypress(SDL_Event &e) {
   switch (e.type) {
@@ -60,9 +55,7 @@ void Player::update() {
   }
   Player::direction = Direction::IDLE;
 
-  if (stage->get_tile(new_pos)->is_walkable()) {
-    Player::set_position(new_pos);
-  } else {
-    ;
+  if (Player::can_move_to(new_pos)) {
+    Player::move_to(new_pos);
   }
 }

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Actor.hpp"
+#include "Enemy.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
 #include "SDL_wrappers.hpp"
@@ -16,8 +17,10 @@ class Engine {
 
   void init_stage();
   void init_player();
+  void init_enemy();
 
   void run();
+  void render();
   void update();
 
   const SDL_Texture *load_texture(const char *filepath);
@@ -36,6 +39,8 @@ class Engine {
   int window_height;
   const char *window_name;
 
+  SDL_Event event;
+  static bool game_running;
   static constexpr float GAME_FPS = 60.0;
   static uint32_t start_time, end_time, delta_time;
 

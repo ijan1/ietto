@@ -26,5 +26,9 @@ std::vector<std::unique_ptr<Tile>> &Map::get_tiles() { return tiles; }
 
 Tile *Map::get_tile(const Position &pos) const {
   auto [x, y] = pos;
+  if ((x >= Map::height) || (y >= Map::width) || (x < 0) || (y < 0)) {
+    SDL_Log("Attemping to index map out of range.\n");
+    return nullptr;
+  }
   return tiles[x * width + y].get();
 }

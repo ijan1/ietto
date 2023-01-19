@@ -8,13 +8,13 @@
 #include "SDL_image.h"
 
 struct SDL_TextureDestroyer {
-  void operator()(SDL_Texture *p) { SDL_Log("Destroying SDL_Texture.\n");SDL_DestroyTexture(p); }
+  void operator()(SDL_Texture *p) { SDL_DestroyTexture(p); }
 };
 struct SDL_WindowDestroyer {
-  void operator()(SDL_Window *p) { SDL_Log("Destoring SDL_Window.\n");SDL_DestroyWindow(p); }
+  void operator()(SDL_Window *p) { SDL_DestroyWindow(p); }
 };
 struct SDL_RendererDestroyer {
-  void operator()(SDL_Renderer *p) { SDL_Log("Destroying SDL_Renderer.\n");SDL_DestroyRenderer(p); }
+  void operator()(SDL_Renderer *p) { SDL_DestroyRenderer(p); }
 };
 
 using SDL_Texture_ptr = std::unique_ptr<SDL_Texture, SDL_TextureDestroyer>;

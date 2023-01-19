@@ -18,7 +18,5 @@ about rendering, managing a bigger project and perseverance.
 # Bugs
 - None this patch
 # TODO
-- Add Tiles and map
-- Movement
-- Enemies
 - Combat
+- Action system

@@ -23,14 +23,12 @@ inline constexpr Direction operator|(Direction x, Direction y) {
 class Player : public Actor {
  public:
   Player(const SDL_Texture *texture, const SDL_Rect &srcClip);
-  ~Player() override;
+  ~Player() override = default;
 
-  void set_stage(Map *stage);
   void handle_keypress(SDL_Event &e);
   void update() override;
 
  private:
-  Map *stage;
   Direction direction;
 };
 

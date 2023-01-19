@@ -8,7 +8,7 @@
 
 class Position {
  public:
-  Position(int x = 1, int y = 1);
+  Position(int x = 0, int y = 0);
   Position operator+(const Position &p);
   Position operator-(const Position &p);
   Position operator*(const Position &p);

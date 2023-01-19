@@ -16,7 +16,14 @@ class Actor {
   int get_max_health() const;
   void set_max_health(const int maxHealth);
   const Position get_position() const;
-  void set_position(const Position &position);
+  void set_position(const Position position);
+  // Tile *get_current_tile() const;
+
+  bool can_move_to(const Position pos);
+  void move_to(const Position pos);
+
+  Map *get_stage() const;
+  void set_stage(Map *stage);
 
   virtual void update() = 0;
 
@@ -30,6 +37,7 @@ class Actor {
   int maxHealth;
   Position position;
 
+  // All actors have access to the stage they're in
   static Map *stage;
 
   const SDL_Texture *texture;
