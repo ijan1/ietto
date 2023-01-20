@@ -6,6 +6,7 @@
 #include "SDL_assert.h"
 #include "SDL_events.h"
 #include "SDL_image.h"
+#include "SDL_log.h"
 
 namespace SDL {
 
@@ -33,6 +34,7 @@ inline void init() {
     SDL_Log("Failed to initialise IMG_Init. Error: %s\n", SDL_GetError());
   }
 }
+
 
 } // namespace SDL
 #endif /* ifndef SDL_WRAPPERS_HPP */

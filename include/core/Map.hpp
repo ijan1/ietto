@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "Tile.hpp"
-#include "tiles.hpp"
+#include "core/Tile.hpp"
+#include "tiles.h"
 
 class Map {
  public:

@@ -1,7 +1,7 @@
 #ifndef TILE_HPP
 #define TILE_HPP
 
-#include "Actor.hpp"
+#include "core/Actor.hpp"
 #include "SDL_wrappers.hpp"
 
 enum class TileType { FLOOR, WALL, RESERVED };
@@ -32,8 +32,6 @@ class Tile {
 
   const SDL_Texture *texture;
   SDL_Rect srcClip;
-  // XXX: the statement below is wrong
-  // SDL_Rect srcClip; // no reason, since all tiles are the same size
 };
 
 #endif /* TILE_HPP */

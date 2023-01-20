@@ -1,8 +1,8 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "Actor.hpp"
-#include "Map.hpp"
+#include "core/Actor.hpp"
+#include "core/Map.hpp"
 
 enum class Direction {
   IDLE = 0,

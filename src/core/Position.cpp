@@ -1,4 +1,4 @@
-#include "Position.hpp"
+#include "core/Position.hpp"
 
 // TODO: consider swapping so that I can think of
 // the position as a Point

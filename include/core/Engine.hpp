@@ -4,11 +4,11 @@
 #include <memory>
 #include <vector>
 
-#include "Actor.hpp"
-#include "Enemy.hpp"
-#include "Map.hpp"
-#include "Player.hpp"
 #include "SDL_wrappers.hpp"
+#include "core/Actor.hpp"
+#include "core/Map.hpp"
+#include "monster/Monster.hpp"
+#include "player/Player.hpp"
 
 class Engine {
  public:

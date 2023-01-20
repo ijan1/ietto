@@ -1,5 +1,6 @@
-#include <Map.hpp>
 #include <memory>
+
+#include <core/Map.hpp>
 
 Map::Map(const SDL_Texture *floor, const SDL_Texture *wall, int width_,
          int height_)

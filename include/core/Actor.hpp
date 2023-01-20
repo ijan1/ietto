@@ -3,7 +3,7 @@
 
 #include <string_view>
 
-#include "Position.hpp"
+#include "core/Position.hpp"
 #include "SDL_wrappers.hpp"
 
 class Map;

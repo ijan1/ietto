@@ -1,4 +1,6 @@
-#include "Player.hpp"
+#include "player/Player.hpp"
+
+#include "SDL_log.h"
 
 Player::Player(const SDL_Texture *texture, const SDL_Rect &srcClip)
     : Actor(texture, srcClip, "Player"), direction(Direction::IDLE) {}
@@ -26,38 +28,30 @@ void Player::handle_keypress(SDL_Event &e) {
 void Player::update() {
   Position new_pos = Player::get_position();
   switch (direction) {
-    case Direction::MOVE_NORTH:
+    using enum Direction;
+    case MOVE_NORTH:
       new_pos = new_pos + Position{-1, 0};
       break;
-    case Direction::MOVE_SOUTH:
+    case MOVE_SOUTH:
       new_pos = new_pos + Position{1, 0};
       break;
-    case Direction::MOVE_EAST:
+    case MOVE_EAST:
       new_pos = new_pos + Position{0, 1};
       break;
-    case Direction::MOVE_WEST:
+    case MOVE_WEST:
       new_pos = new_pos + Position{0, -1};
       break;
-    case Direction::MOVE_NORTHEAST:
-      new_pos = new_pos + Position{-1, 1};
-      break;
-    case Direction::MOVE_NORTHWEST:
-      new_pos = new_pos + Position{-1, -1};
-      break;
-    case Direction::MOVE_SOUTHEAST:
-      new_pos = new_pos + Position{1, 1};
-      break;
-    case Direction::MOVE_SOUTHWEST:
-      new_pos = new_pos + Position{1, -1};
-      break;
-    case Direction::IDLE:
+    default:
       break;
   }
   Player::direction = Direction::IDLE;
 
   if (stage->tile_has_actor(new_pos)) {
-    SDL_Log("You got into combat with %s\n",
-            stage->get_tile(new_pos)->get_actor()->get_name().data());
+    // TODO: the log message has to be in 'Combat'
+    // too much indirection happening here
+    SDL_LogMessage(SDL_LOG_CATEGORY_INPUT, SDL_LOG_PRIORITY_INFO,
+                   "You got into combat with %s\n",
+                   stage->get_tile(new_pos)->get_actor()->get_name().data());
   }
 
   if (Player::can_move_to(new_pos)) {

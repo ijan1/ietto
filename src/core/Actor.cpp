@@ -1,7 +1,6 @@
-#include "Actor.hpp"
-
-#include "Map.hpp"
-#include "Position.hpp"
+#include "core/Actor.hpp"
+#include "core/Map.hpp"
+#include "core/Position.hpp"
 
 Actor::Actor(const SDL_Texture *texture_, const SDL_Rect &srcClip_,
              std::string name_)

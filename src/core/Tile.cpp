@@ -1,4 +1,4 @@
-#include "Tile.hpp"
+#include "core/Tile.hpp"
 
 Tile::Tile(const SDL_Texture *tex, TileType type_, Position pos)
     : position(pos),

@@ -1,7 +1,7 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
-#include "Actor.hpp"
+#include "core/Actor.hpp"
 
 class Enemy : public Actor {
  public:
