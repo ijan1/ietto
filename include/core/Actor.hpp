@@ -3,8 +3,8 @@
 
 #include <string_view>
 
-#include "core/Position.hpp"
 #include "SDL_wrappers.hpp"
+#include "core/Position.hpp"
 
 class Map;
 
@@ -15,14 +15,18 @@ class Actor {
   virtual ~Actor() = 0;
 
   std::string_view get_name() const;
-  void set_name(std::string name); // TODO: don't pass in a string
+  // const char* get_name() const; figure out to have this for convinience's
+  // sake
+  void set_name(std::string name); // TODO: find out if passing in a string copy
+                                   // is the way to go here
   int get_current_health() const;
-  void set_current_health(const int health);
+  void set_current_health(int health);
   int get_max_health() const;
-  void set_max_health(const int maxHealth);
+  void set_max_health(int maxHealth);
   const Position get_position() const;
   void set_position(const Position position);
-  // Tile *get_current_tile() const;
+
+  virtual bool is_monster() = 0;
 
   bool can_move_to(const Position pos);
   void move_to(const Position pos);

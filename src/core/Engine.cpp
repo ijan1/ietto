@@ -1,6 +1,7 @@
 #include "core/Engine.hpp"
 
 #include <memory>
+#include "SDL_log.h"
 
 constexpr int TEXTURE_SIZE = 16;
 
@@ -19,7 +20,8 @@ Engine::Engine(const char *name_, int width_, int height_)
       window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
       window_width, window_height, SDL_WINDOW_SHOWN));
   if (!window) {
-    SDL_Log("Failed to initialise a window. Error: %s\n", SDL_GetError());
+    SDL_LogCritical(SDL_LOG_CATEGORY_VIDEO, "Failed to initialise a window.\nError: %s\n", SDL_GetError());
+    // TODO: Add graceful exit
   }
 
   // TODO: look into the following:
@@ -28,7 +30,8 @@ Engine::Engine(const char *name_, int width_, int height_)
   renderer = SDL::Renderer_ptr(
       SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_PRESENTVSYNC));
   if (!renderer) {
-    SDL_Log("Failed to initialise the renderer. Error: %s\n", SDL_GetError());
+    SDL_LogCritical(SDL_LOG_CATEGORY_VIDEO, "Failed to create renderer.\nError: %s\n", SDL_GetError());
+    // TODO: Add graceful exit
   }
 
   instantiated = true;
@@ -61,7 +64,7 @@ void Engine::init_enemy() {
   SDL_Rect srcClip{0, 0, TEXTURE_SIZE, TEXTURE_SIZE};
   const SDL_Texture *texture_enemy =
       Engine::load_texture("resources/Characters/Player1.png");
-  enemies.emplace_back(std::make_unique<Enemy>(texture_enemy, srcClip));
+  enemies.emplace_back(std::make_unique<Monster>(texture_enemy, srcClip));
 }
 
 void Engine::run() {

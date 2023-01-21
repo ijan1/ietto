@@ -1,12 +1,12 @@
 #include "monster/Monster.hpp"
 
-Enemy::Enemy(const SDL_Texture *texture, const SDL_Rect &srcClip)
+Monster::Monster(const SDL_Texture *texture, const SDL_Rect &srcClip)
     : Actor(texture, srcClip) {}
 
-void Enemy::update() {
-  auto pos = Enemy::get_position();
+void Monster::update() {
+  auto pos = Monster::get_position();
 
-  if (Enemy::can_move_to(pos)) {
-    Enemy::move_to(pos);
+  if (Monster::can_move_to(pos)) {
+    Monster::move_to(pos);
   }
 }

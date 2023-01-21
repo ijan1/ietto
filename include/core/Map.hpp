@@ -17,6 +17,7 @@ class Map {
   int get_height();
 
   bool tile_has_actor(const Position pos);
+  Actor *tile_get_actor(const Position pos);
 
   std::vector<std::unique_ptr<Tile>> &get_tiles();
   Tile *get_tile(const Position &pos) const;
@@ -26,6 +27,8 @@ class Map {
   // TODO: maybe pick better names?
   int width;
   int height;
+  // TODO: does it make sense to have pointers to tiles?
+  // just construct them in place
   std::vector<std::unique_ptr<Tile>> tiles;
 
   // Engine should have ownership of the textures

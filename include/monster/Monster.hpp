@@ -3,11 +3,12 @@
 
 #include "core/Actor.hpp"
 
-class Enemy : public Actor {
+class Monster : public Actor {
  public:
-  Enemy(const SDL_Texture *texture, const SDL_Rect &srcClip);
-  ~Enemy() override = default;
+  Monster(const SDL_Texture *texture, const SDL_Rect &srcClip);
+  ~Monster() override = default;
 
+  constexpr bool is_monster() override { return true; }
   void update() override;
 
  private:

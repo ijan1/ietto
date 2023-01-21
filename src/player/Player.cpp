@@ -1,6 +1,6 @@
 #include "player/Player.hpp"
 
-#include "SDL_log.h"
+#include "core/Combat.h"
 
 Player::Player(const SDL_Texture *texture, const SDL_Rect &srcClip)
     : Actor(texture, srcClip, "Player"), direction(Direction::IDLE) {}
@@ -46,15 +46,16 @@ void Player::update() {
   }
   Player::direction = Direction::IDLE;
 
-  if (stage->tile_has_actor(new_pos)) {
-    // TODO: the log message has to be in 'Combat'
-    // too much indirection happening here
-    SDL_LogMessage(SDL_LOG_CATEGORY_INPUT, SDL_LOG_PRIORITY_INFO,
-                   "You got into combat with %s\n",
-                   stage->get_tile(new_pos)->get_actor()->get_name().data());
-  }
-
-  if (Player::can_move_to(new_pos)) {
+  // XXX: is it better to have the target tike be a
+  // pointer or a plain ol' object?
+  Tile target_tile = *stage->get_tile(new_pos);
+  // if target_tile.has_enemy()
+  // then attack
+  // otherwise move there
+  if (target_tile.has_actor() &&
+      target_tile.get_actor()->is_monster()) {
+    attack(*this, *target_tile.get_actor());
+  } else if (Player::can_move_to(new_pos)) {
     Player::move_to(new_pos);
   }
 }

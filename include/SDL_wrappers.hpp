@@ -35,6 +35,5 @@ inline void init() {
   }
 }
 
-
 } // namespace SDL
 #endif /* ifndef SDL_WRAPPERS_HPP */

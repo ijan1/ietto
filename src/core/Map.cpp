@@ -31,6 +31,14 @@ bool Map::tile_has_actor(const Position pos) {
   return Map::get_tile(pos)->has_actor();
 }
 
+Actor *Map::tile_get_actor(const Position pos) {
+  if(!Map::tile_has_actor(pos)) {
+    return nullptr;
+  }
+
+  return Map::get_tile(pos)->get_actor();
+}
+
 std::vector<std::unique_ptr<Tile>> &Map::get_tiles() { return tiles; }
 
 Tile *Map::get_tile(const Position &pos) const {

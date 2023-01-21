@@ -25,6 +25,8 @@ class Player : public Actor {
   Player(const SDL_Texture *texture, const SDL_Rect &srcClip);
   ~Player() override = default;
 
+  constexpr virtual bool is_monster() override { return false; }
+
   void handle_keypress(SDL_Event &e);
   void update() override;
 

@@ -1,8 +1,8 @@
 #ifndef TILE_HPP
 #define TILE_HPP
 
-#include "core/Actor.hpp"
 #include "SDL_wrappers.hpp"
+#include "core/Actor.hpp"
 
 enum class TileType { FLOOR, WALL, RESERVED };
 
